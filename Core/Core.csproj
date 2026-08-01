@@ -56,7 +56,7 @@ See home page https://github.com/manuelbl/SwissQRBill.NET for examples and other
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="2.*" />
+    <PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="3.*" />
   </ItemGroup>
 
   <ItemGroup>
