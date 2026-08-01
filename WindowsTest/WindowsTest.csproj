@@ -34,7 +34,7 @@
     <!-- Pinned: ImageMagick 7.1.2-3 and later (Magick.NET 14.14.0+) have lost the sensitivity of the
          perceptual hash. Two entirely different QR bills then compare as equal, which would make the
          image comparison silently accept any change. See ImageComparer.cs. -->
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.13.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.15.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageReference Include="Verify.XunitV3" Version="31.28.0" />
     <PackageReference Include="xunit.v3" Version="3.2.2" />
