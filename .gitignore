@@ -270,3 +270,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# API documentation archive (built by the release workflow)
+API.Documentation.zip

@@ -8,6 +8,13 @@
         "dotnet-validate"
       ],
       "rollForward": true
+    },
+    "docfx": {
+      "version": "2.78.5",
+      "commands": [
+        "docfx"
+      ],
+      "rollForward": true
     }
   }
 }

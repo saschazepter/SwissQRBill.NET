@@ -39,13 +39,13 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Upload received files from failing tests
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: Received-${{ runner.os }}
           path: "**/*.received.*"
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: TestResults-${{ runner.os }}
@@ -55,6 +55,12 @@ jobs:
         run: |
           dotnet tool restore
           dotnet pack --no-build --verbosity normal
+        if: startsWith(matrix.os,'windows')
+
+      - name: Generate API documentation
+        run: |
+          dotnet tool restore
+          dotnet docfx docfx/docfx.json --warningsAsErrors
         if: startsWith(matrix.os,'windows')
 
       - name: Cache SonarCloud packages
