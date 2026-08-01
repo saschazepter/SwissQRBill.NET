@@ -1,0 +1,91 @@
+name: Examples
+
+on: [push, pull_request]
+
+env:
+  Configuration: Release
+  ContinuousIntegrationBuild: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-256color
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build example projects
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            6.x
+            8.x
+
+      - name: Create local NuGet source
+        run: |
+          mkdir ..\LocalPackages
+          $pkgdir = Resolve-Path ..\LocalPackages
+          dotnet nuget add source $pkgdir --name Local
+
+      - name: Determine package version
+        shell: pwsh
+        run: |
+          $v = (dotnet msbuild Core/Core.csproj -getProperty:PackageVersion).Trim()
+          if (-not $v) { throw "PackageVersion could not be determined" }
+          "PkgVersion=$v" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Building examples against version $v"
+
+      - name: Build library packages
+        run: |
+          dotnet restore
+          dotnet tool restore
+          dotnet pack Core/Core.csproj --verbosity normal
+          dotnet pack PixelCanvas/PixelCanvas.csproj --verbosity normal
+          dotnet pack Windows/Windows.csproj --verbosity normal
+
+      - name: Publish library packages to local NuGet source
+        shell: pwsh
+        run: |
+          $packages = @(
+            "Core\bin\Release\Codecrete.SwissQRBill.Core.$env:PkgVersion.nupkg",
+            "PixelCanvas\bin\Release\Codecrete.SwissQRBill.Generator.$env:PkgVersion.nupkg",
+            "Windows\bin\Release\Codecrete.SwissQRBill.Windows.$env:PkgVersion.nupkg"
+          )
+          foreach ($pkg in $packages) {
+            nuget push (Resolve-Path $pkg) -Source Local
+          }
+
+      - name: Build Basic
+        run: |
+          dotnet add package Codecrete.SwissQRBill.Generator --version $env:PkgVersion
+          dotnet build
+        working-directory: Examples/Basic
+
+      - name: Build iText
+        run: |
+          dotnet add iText\iText.csproj package Codecrete.SwissQRBill.Core --version $env:PkgVersion
+          dotnet build
+        working-directory: Examples/iText
+
+      - name: Build WindowsForms
+        run: |
+          dotnet add package Codecrete.SwissQRBill.Windows --version $env:PkgVersion
+          dotnet build
+        working-directory: Examples/WindowsForms
+
+      - name: Build WindowsPresentationFoundation
+        run: |
+          dotnet add package Codecrete.SwissQRBill.Core --version $env:PkgVersion
+          dotnet build
+        working-directory: Examples/WindowsPresentationFoundation
+
+      - name: Build WinUI
+        run: |
+          dotnet add WinUI\WinUI.csproj package Codecrete.SwissQRBill.Core --version $env:PkgVersion
+          dotnet build WinUI\WinUI.csproj -p:Platform=x64
+        working-directory: Examples/WinUI
