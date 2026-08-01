@@ -109,3 +109,23 @@ jobs:
           git tag -a $tag -m "Release $tag"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           git push origin "refs/tags/$tag"
+
+      - name: Create draft GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $tag = "v$version"
+          $assets = @(
+            "Core/bin/Release/Codecrete.SwissQRBill.Core.$version.nupkg",
+            "PixelCanvas/bin/Release/Codecrete.SwissQRBill.Generator.$version.nupkg",
+            "Windows/bin/Release/Codecrete.SwissQRBill.Windows.$version.nupkg",
+            "API.Documentation.zip"
+          )
+          if (gh release view $tag 2>$null) {
+            gh release upload $tag $assets --clobber
+          } else {
+            gh release create $tag $assets --draft --title "$tag" --generate-notes
+          }
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }

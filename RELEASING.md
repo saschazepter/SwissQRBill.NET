@@ -36,10 +36,11 @@ repository gets examples that build against a package actually available on nuge
    `Examples/WindowsPresentationFoundation`, `Examples/WinUI`, and the `HintPath`/
    `packages.config` entries of `Examples/PDFsharp` and `Examples/MicrosoftWordAddIn`.
 5. Commit as `Release vX.Y.Z` and push.
-6. Run the *Publish Release to NuGet* workflow
-   ([.github/workflows/release.yml](.github/workflows/release.yml)) via `workflow_dispatch`.
+6. Run the [*Publish Release to NuGet*](https://github.com/manuelbl/SwissQRBill.NET/actions/workflows/release.yml) workflow.
    It reads the version from `Core/Core.csproj`, runs the tests, packs and publishes all
-   three packages, and creates and pushes the `vX.Y.Z` tag.
+   three packages, creates and pushes the `vX.Y.Z` tag and creates a draft release.
+   The job only runs if the deployment review is approved.
+7. Connect to codecrete.net and run the script to publish the documentation.
 7. Bump the three project files to the next planned version with a `-dev` suffix (e.g.
    `3.6.0-dev`), commit as `Bump version to 3.6.0-dev for development`. Leave `README.md`,
    the `docs/README.md` files, and the example projects untouched — they keep pointing at
