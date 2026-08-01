@@ -14,7 +14,7 @@
     <PackageReleaseNotes>New in release 3.5.x:
 - Speed up due to faster QR code generation
 - More compact QR code encoding resulting in bigger QR code "pixels"</PackageReleaseNotes>
-    <Version>3.5.0</Version>
+    <Version>3.6.0-dev</Version>
     <Description>Generates the new QR bills for invoicing in Switzerland.
 
 The Swiss QR bill library:
@@ -40,7 +40,7 @@ See home page https://github.com/manuelbl/SwissQRBill.NET for examples and other
     <FileVersion>3.5.0.0</FileVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EnablePackageValidation>true</EnablePackageValidation>
-    <PackageVersion>3.5.0</PackageVersion>
+    <PackageVersion>3.6.0-dev</PackageVersion>
     <PackageValidationBaselineVersion>3.3.0</PackageValidationBaselineVersion>
     <Deterministic>True</Deterministic>
   </PropertyGroup>
