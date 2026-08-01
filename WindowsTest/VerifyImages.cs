@@ -25,7 +25,7 @@ namespace Codecrete.SwissQRBill.WindowsTest
         static VerifyImages()
         {
             VerifierSettings.RegisterStreamConverter("emf", Convert);
-            ImageComparer.RegisterComparers(threshold: 0.05, ErrorMetric.RootMeanSquared);
+            ImageComparer.RegisterComparers(threshold: 0.05, ErrorMetric.PerceptualHash);
 
             Settings.UseDirectory("ReferenceFiles");
         }
