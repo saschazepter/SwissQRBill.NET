@@ -5,6 +5,8 @@
 // https://opensource.org/licenses/MIT
 //
 
+using Codecrete.SwissQRBill.Testing;
+using ImageMagick;
 using System.Runtime.CompilerServices;
 using VerifyTests;
 using VerifyXunit;
@@ -17,7 +19,7 @@ namespace Codecrete.SwissQRBill.PixelCanvasTest
 
         static VerifyImages()
         {
-            VerifyImageMagick.RegisterComparers(threshold: 0.35, ImageMagick.ErrorMetric.PerceptualHash);
+            ImageComparer.RegisterComparers(threshold: 0.35, ErrorMetric.PerceptualHash);
 
             Settings.UseDirectory("ReferenceFiles");
         }

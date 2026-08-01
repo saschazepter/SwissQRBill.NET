@@ -6,8 +6,10 @@
 //
 
 using Codecrete.SwissQRBill.Generator;
+using Codecrete.SwissQRBill.Testing;
 using Docnet.Core;
 using Docnet.Core.Models;
+using ImageMagick;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +28,7 @@ namespace Codecrete.SwissQRBill.CoreTest
         static VerifyImages()
         {
             VerifierSettings.RegisterStreamConverter("pdf", ConvertPdfToPng);
-            VerifyImageMagick.RegisterComparers(threshold: 0.1, ImageMagick.ErrorMetric.PerceptualHash);
+            ImageComparer.RegisterComparers(threshold: 0.1, ErrorMetric.PerceptualHash);
 
             Settings.UseDirectory("ReferenceFiles");
         }

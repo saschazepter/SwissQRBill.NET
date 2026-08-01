@@ -5,6 +5,8 @@
 // https://opensource.org/licenses/MIT
 //
 
+using Codecrete.SwissQRBill.Testing;
+using ImageMagick;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,7 +25,7 @@ namespace Codecrete.SwissQRBill.WindowsTest
         static VerifyImages()
         {
             VerifierSettings.RegisterStreamConverter("emf", Convert);
-            VerifyImageMagick.RegisterComparers(threshold: 0.35, ImageMagick.ErrorMetric.PerceptualHash);
+            ImageComparer.RegisterComparers(threshold: 0.35, ErrorMetric.PerceptualHash);
 
             Settings.UseDirectory("ReferenceFiles");
         }

@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\TestShared\ImageComparer.cs" Link="ImageComparer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Windows\Windows.csproj" />
   </ItemGroup>
 
