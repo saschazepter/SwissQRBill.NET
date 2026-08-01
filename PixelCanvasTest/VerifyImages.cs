@@ -19,7 +19,7 @@ namespace Codecrete.SwissQRBill.PixelCanvasTest
 
         static VerifyImages()
         {
-            ImageComparer.RegisterComparers(threshold: 0.35, ErrorMetric.PerceptualHash);
+            ImageComparer.RegisterComparers(threshold: 0.05, ErrorMetric.RootMeanSquared);
 
             Settings.UseDirectory("ReferenceFiles");
         }

@@ -8,6 +8,7 @@
 using Codecrete.SwissQRBill.Generator;
 using Codecrete.SwissQRBill.Testing;
 using Docnet.Core;
+using Docnet.Core.Converters;
 using Docnet.Core.Models;
 using ImageMagick;
 using SkiaSharp;
@@ -28,7 +29,7 @@ namespace Codecrete.SwissQRBill.CoreTest
         static VerifyImages()
         {
             VerifierSettings.RegisterStreamConverter("pdf", ConvertPdfToPng);
-            ImageComparer.RegisterComparers(threshold: 0.1, ErrorMetric.PerceptualHash);
+            ImageComparer.RegisterComparers(threshold: 0.05, ErrorMetric.PerceptualHash);
 
             Settings.UseDirectory("ReferenceFiles");
         }
@@ -48,11 +49,15 @@ namespace Codecrete.SwissQRBill.CoreTest
                     {
                         var width = pageReader.GetPageWidth();
                         var height = pageReader.GetPageHeight();
-                        var pixelData = pageReader.GetImage();
+                        // The page is rendered onto a white background. Without it, the page content would
+                        // end up in the alpha channel only (black pixels throughout, varying transparency).
+                        // ImageMagick's error metrics ignore the alpha channel, and the image comparison
+                        // would then consider two entirely different QR bills as equal.
+                        var pixelData = pageReader.GetImage(new NaiveTransparencyRemover());
 
                         bitmap = new SKBitmap();
                         var gcHandle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
-                        var info = new SKImageInfo(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Unpremul);
+                        var info = new SKImageInfo(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Opaque);
                         bitmap.InstallPixels(info, gcHandle.AddrOfPinnedObject(), width * 4, delegate { gcHandle.Free(); });
                     }
 
@@ -64,7 +69,6 @@ namespace Codecrete.SwissQRBill.CoreTest
                 }
             }
 
-            // note: all constructor arguments must be specified as the overloads are otherwise ambiguous
             return new ConversionResult(null, pngStreams.Select(e => new Target("png", e, null, false)));
         }
 

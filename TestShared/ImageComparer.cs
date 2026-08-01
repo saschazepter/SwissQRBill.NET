@@ -24,14 +24,13 @@ namespace Codecrete.SwissQRBill.Testing
     /// </para>
     /// <para>
     /// The byte comparison succeeds for almost all tests as the generated output is deterministic.
-    /// The ImageMagick comparison — in particular with the <see cref="ErrorMetric.PerceptualHash"/>
-    /// metric, which takes seconds per A4 sized image — is then only needed for the few images
-    /// that genuinely differ, e.g. due to a different font version or platform.
+    /// The ImageMagick comparison is then only needed for the few images that genuinely differ,
+    /// e.g. due to a different font version or platform.
     /// </para>
     /// <para>
-    /// Note that Magick.NET is pinned to 14.13.1 in the test projects. In later versions the perceptual
-    /// hash no longer discriminates between two entirely different QR bills (it reports a difference of
-    /// zero), which would make this comparison accept any change that gets past the byte comparison.
+    /// The compared images must be opaque. ImageMagick's error metrics only look at the color channels.
+    /// If the image content was in the alpha channel, two entirely different QR bills would compare
+    /// as equal.
     /// </para>
     /// </remarks>
     public static class ImageComparer
