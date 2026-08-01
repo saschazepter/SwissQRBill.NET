@@ -64,7 +64,8 @@ namespace Codecrete.SwissQRBill.CoreTest
                 }
             }
 
-            return new ConversionResult(null, pngStreams.Select(e => new Target("png", e)));
+            // note: all constructor arguments must be specified as the overloads are otherwise ambiguous
+            return new ConversionResult(null, pngStreams.Select(e => new Target("png", e, null, false)));
         }
 
         public static SettingsTask Verify(byte[] imageData, GraphicsFormat format, [CallerFilePath] string sourceFile = "")

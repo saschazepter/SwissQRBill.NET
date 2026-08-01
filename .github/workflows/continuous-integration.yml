@@ -26,7 +26,6 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
-            6.x
             8.x
 
       - name: Restore NuGet packages
