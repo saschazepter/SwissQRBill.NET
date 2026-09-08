@@ -44,7 +44,10 @@ namespace Codecrete.SwissQRBill.Generator
         /// <param name="offsetY">The y offset.</param>
         internal void Draw(ICanvas graphics, double offsetX, double offsetY)
         {
-            var qrCode = QrCode.EncodeText(_embeddedText, QrCode.Ecc.Medium);
+            // It is against best practices when using QR codes but unncessarily mandated by the Swiss QR Bill standard:
+            // Text encoding in UTF-8 even when Latin-1 would suffice, and error correction level forced at medium level
+            // even when a free upgrade to a higher level was possible.
+            var qrCode = QrCode.EncodeTextAdvanced(_embeddedText, QrCode.Ecc.Medium, boostEcl: false, eci: ECI.UTF8);
 
             var modules = CopyModules(qrCode);
             ClearSwissCrossArea(modules);
